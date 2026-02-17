@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "openrouter-oai-agentsdk"
-version = "0.1.0"
-description = "OpenRouter model provider integration for the OpenAI Agents SDK."
+version = "0.1.1"
+description = "Plug OpenRouter into the OpenAI Agents SDK with a drop-in model provider and RunConfig."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
@@ -31,6 +31,12 @@ dev = [
     "build>=1.2.2",
     "ruff>=0.9.0",
 ]
+
+[project.urls]
+Homepage = "https://github.com/Goodbuilder34/openrouter-oai-agentsdk"
+Repository = "https://github.com/Goodbuilder34/openrouter-oai-agentsdk"
+Issues = "https://github.com/Goodbuilder34/openrouter-oai-agentsdk/issues"
+Changelog = "https://github.com/Goodbuilder34/openrouter-oai-agentsdk/releases"
 
 [project.scripts]
 openrouter-agentsdk-check = "openrouter_oai_agentsdk.__main__:main"
