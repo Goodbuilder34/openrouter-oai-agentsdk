@@ -47,46 +47,21 @@ export OPENROUTER_API_KEY="sk-or-v1-..."
 3. Create `main.py`:
 
 ```python
-import asyncio
-
-from openai.types.responses import ResponseTextDeltaEvent
-from openai.types.shared import Reasoning
-
-from agents import Agent, ModelSettings, Runner
+from agents import Agent, Runner
 from openrouter_oai_agentsdk import create_openrouter_run_config
 
-
-def agent_settings(*, thinking: bool) -> ModelSettings:
-    return ModelSettings(reasoning=None if thinking else Reasoning(effort="none"))
-
-
 agent = Agent(
-    name="Math Tutor",
-    instructions=(
-        "You provide help with math problems. "
-        "Explain your reasoning at each step and include examples."
-    ),
-    model="z-ai/glm-5",
-    model_settings=agent_settings(thinking=False),
+    name="Assistant",
+    instructions="You are a helpful assistant.",
+    model="openai/gpt-4o-mini",
 )
 
-
-async def main() -> None:
-    result = Runner.run_streamed(
-        agent,
-        "How to calculate the fall rate for something?",
-        run_config=create_openrouter_run_config(),
-    )
-    async for event in result.stream_events():
-        if event.type == "raw_response_event" and isinstance(
-            event.data, ResponseTextDeltaEvent
-        ):
-            print(event.data.delta, end="", flush=True)
-    print()
-
-
-if __name__ == "__main__":
-    asyncio.run(main())
+result = Runner.run_sync(
+    agent,
+    "In one sentence, what is gravity?",
+    run_config=create_openrouter_run_config(),
+)
+print(result.final_output)
 ```
 
 4. Run it:
@@ -95,11 +70,18 @@ if __name__ == "__main__":
 uv run python main.py
 ```
 
-How this works:
+What each line does:
 
-- `create_openrouter_run_config()` reads environment variables and returns a `RunConfig`.
-- `Runner.run_streamed(..., run_config=...)` uses OpenRouter through that provider.
-- `Agent(model="z-ai/glm-5")` picks the specific model for this run.
+1. `Agent(...)` defines behavior and the model you want.
+2. `create_openrouter_run_config()` wires OpenRouter as the provider.
+3. `Runner.run_sync(...)` executes one request using that provider.
+4. `result.final_output` prints the agent's final text response.
+
+If you already set `OPENROUTER_MODEL`, you can omit `model=...` on `Agent(...)`.
+
+## Next step: streaming (optional)
+
+Use `Runner.run_streamed(...)` only when you want token-by-token output in real time. Start with `run_sync` first.
 
 ## Usage patterns
 

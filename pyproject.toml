@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "openrouter-oai-agentsdk"
-version = "0.1.1"
+version = "0.1.2"
 description = "Plug OpenRouter into the OpenAI Agents SDK with a drop-in model provider and RunConfig."
 readme = "README.md"
 requires-python = ">=3.10"
